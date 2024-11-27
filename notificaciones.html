@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones y Alarma</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #4c4df7, #6e85ff, #9ba9ff);
+            color: #fff;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 78px;
+            background: #1a1d29;
+            padding: 6px 14px;
+            z-index: 100;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar .logo-details {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            font-size: 28px;
+            color: #fff;
+            margin-right: 10px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            right: 10px;
+            font-size: 23px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar ul.nav-list {
+            margin-top: 20px;
+        }
+
+        .sidebar ul.nav-list li {
+            position: relative;
+            list-style: none;
+            margin: 8px 0;
+        }
+
+        .sidebar ul.nav-list li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            color: #fff;
+            transition: all 0.4s ease;
+        }
+
+        .sidebar ul.nav-list li a:hover {
+            background: #575757;
+        }
+
+        .sidebar ul.nav-list li i {
+            font-size: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .sidebar ul.nav-list li .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open ul.nav-list li .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Estilos del perfil */
+        .profile {
+            margin-top: auto;
+            /* Para posicionarlo al final */
+        }
+
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            transition: all 0.4s ease;
+        }
+
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open .profile .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Icono de logout */
+        .sidebar .profile i {
+            font-size: 16px;
+            margin-left: auto;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open .profile i {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+
+        /* Sección principal */
+        .home-section {
+            position: relative;
+            left: 78px;
+            width: calc(100% - 78px);
+            height: 100vh;
+            background: linear-gradient(to bottom, #4c4df7, #6e85ff, #9ba9ff);
+            transition: all 0.5s ease;
+            padding: 20px;
+        }
+
+        .sidebar.open~.home-section {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .home-section .text {
+            font-size: 25px;
+            font-weight: 500;
+            color: #11101d;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+
+        .container h2 {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #4c4df7;
+        }
+
+        .container p {
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            color: #4c4df7;
+            margin-bottom: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .option label {
+            font-size: 14px;
+        }
+
+        .option input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus icon'></i>
+            <span class="logo_name">CADI</span>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="eventos.html">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Eventos</span>
+                </a>
+            </li>
+            <li>
+                <a href="analisis.html">
+                    <i class='bx bx-pie-chart-alt-2'></i>
+                    <span class="links_name">Estadísticas</span>
+                </a>
+            </li>
+            <li>
+                <a href="horario.html">
+                    <i class='bx bx-time'></i>
+                    <span class="links_name">Horario</span>
+                </a>
+            </li>
+            <li>
+                <a href="recordatoriosIm.html">
+                    <i class='bx bx-bell'></i>
+                    <span class="links_name">Recordatorios</span>
+                </a>
+            </li>
+            <li>
+                <a href="ajustes.html">
+                    <i class='bx bx-cog'></i>
+                    <span class="links_name">Ajustes</span>
+                </a>
+            </li>
+            <li class="profile">
+                <a href="perfil.html">
+                    <img src="OIP.jpg" alt="profileImg">
+                    <span class="links_name">Usuario</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- Main Content -->
+    <section class="home-section">
+        <div class="container">
+            <h2>Notificaciones y Alarma</h2>
+            <p>Seleccionar solo una de cada sección</p>
+
+            <div class="section">
+                <h3>Notificación:</h3>
+                <div class="option">
+                    <label>Barra de estado</label>
+                    <input type="checkbox">
+                </div>
+                <div class="option">
+                    <label>Notificación emergente</label>
+                    <input type="checkbox">
+                </div>
+                <div class="option">
+                    <label>Notificaciones en pantalla bloqueada</label>
+                    <input type="checkbox">
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Alarma:</h3>
+                <div class="option">
+                    <label>Sonido y vibración</label>
+                    <input type="checkbox">
+                </div>
+                <div class="option">
+                    <label>Solo sonido</label>
+                    <input type="checkbox">
+                </div>
+                <div class="option">
+                    <label>Solo vibración</label>
+                    <input type="checkbox">
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        const sidebar = document.querySelector(".sidebar");
+        const closeBtn = document.querySelector("#btn");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+        });
+    </script>
+</body>
+
+</html>

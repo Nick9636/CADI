@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil de Usuario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 80px;
+            height: 100%;
+            background: #1a1d29;
+            padding: 10px 14px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.open {
+            width: 220px;
+        }
+
+        .sidebar .logo-details {
+            display: flex;
+            align-items: center;
+            height: 60px;
+            color: #fff;
+        }
+
+        .sidebar .logo-details .logo_name {
+            margin-left: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar ul {
+            margin-top: 20px;
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background: #575757;
+        }
+
+        .sidebar ul li a i {
+            font-size: 24px;
+        }
+
+        .sidebar ul li a span {
+            margin-left: 10px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.open ul li a span {
+            opacity: 1;
+        }
+
+        /* Main content */
+        .home-section {
+            margin-left: 80px;
+            padding: 20px;
+            width: calc(100% - 80px);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .sidebar.open~.home-section {
+            margin-left: 220px;
+            width: calc(100% - 220px);
+        }
+
+        .home-section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .edit-profile-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .edit-profile-form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #555;
+        }
+
+        .edit-profile-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .edit-profile-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1d29;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .edit-profile-form button:hover {
+            background-color: #3335ca;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus'></i>
+            <span class="logo_name">CADI</span>
+        </div>
+        <ul>
+            <li><a href="eventos.html"><i class='bx bx-grid-alt'></i> <span>Eventos</span></a></li>
+            <li><a href="PaginaP.html"><i class="bx bx-calendar"></i> <span>Calendario</span></a></li>
+            <li><a href="analisis.html"><i class="bx bx-pie-chart-alt-2"></i> <span>Estadísticas</span></a></li>
+            <li><a href="horario.html"><i class='bx bx-time'></i> <span>Horario</span></a></li>
+            <li><a href="recordatoriosIm.html"><i class='bx bx-bell'></i> <span>Recordatorios</span></a></li>
+            <li><a href="ajustes.html"><i class="bx bx-cog"></i> <span>Ajustes</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <section class="home-section">
+        <h2>Editar Perfil</h2>
+        <div class="edit-profile-form">
+            <form>
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" placeholder="Escribe tu nombre">
+                <label for="surname">Apellido:</label>
+                <input type="text" id="surname" name="surname" placeholder="Escribe tu apellido">
+                <label for="age">Edad:</label>
+                <input type="number" id="age" name="age" placeholder="Escribe tu edad">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" placeholder="Escribe tu contraseña">
+                <button type="submit">Guardar Cambios</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        const sidebar = document.querySelector(".sidebar");
+        const closeBtn = document.querySelector(".logo-details");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+        });
+    </script>
+</body>
+
+</html>

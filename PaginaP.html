@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla Principal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <style>
+        /* Reseteo y fuente base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 78px;
+            background: #1a1d29;
+            padding: 6px 14px;
+            z-index: 100;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar .logo-details {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            font-size: 28px;
+            color: #fff;
+            margin-right: 10px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            right: 10px;
+            font-size: 23px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar ul.nav-list {
+            margin-top: 20px;
+        }
+
+        .sidebar ul.nav-list li {
+            position: relative;
+            list-style: none;
+            margin: 8px 0;
+        }
+
+        .sidebar ul.nav-list li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            color: #fff;
+            transition: all 0.4s ease;
+        }
+
+        .sidebar ul.nav-list li a:hover {
+            background: #575757;
+        }
+
+        .sidebar ul.nav-list li i {
+            font-size: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .sidebar ul.nav-list li .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .sidebar.open ul.nav-list li .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Estilos del perfil */
+        .profile {
+            margin-top: auto;
+            /* Para posicionarlo al final */
+        }
+
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            transition: all 0.4s ease;
+        }
+
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open .profile .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Sección principal */
+        .home-section {
+            position: relative;
+            left: 78px;
+            width: calc(100% - 78px);
+            height: 100vh;
+            background: #3058dbb9;
+            transition: all 0.5s ease;
+            padding: 20px;
+        }
+
+        .sidebar.open~.home-section {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .home-section .text {
+            font-size: 25px;
+            font-weight: 500;
+            color: #11101d;
+        }
+
+        #calendarView {
+            display: contents;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+
+        }
+
+        .calendar-view,
+        .tasks,
+        .reminders-view,
+        .profile-content {
+            display: none;
+        }
+
+        .calendar-view.active,
+        .tasks.active,
+        .reminders-view.active,
+        .profile-content.active {
+            display: block;
+        }
+
+        /* Calendar Styles */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header button {
+            background-color: #1a1d29;
+            color: white;
+            border: none;
+
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-header button:hover {
+            background-color: #575757;
+            transform: scale(1.1);
+        }
+
+        .calendar-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            text-align: center;
+        }
+
+        .calendar-days,
+        .calendar-dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar-dates .date {
+            text-align: center;
+            padding: 20px;
+            margin: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #fff;
+            transition: 0.3s;
+        }
+
+        .calendar-dates .date:hover {
+            background: #ddd;
+        }
+
+        .calendar-dates .selected {
+            background: #ff6347;
+            color: #fff;
+        }
+
+        /* Estilos del modal (tareas)*/
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 99;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            display: none;
+        }
+
+        .modal h3 {
+            margin-bottom: 10px;
+            font-size: 28px;
+            color: #11101d;
+        }
+
+        .modal label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+
+        .modal input,
+        .modal select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .modal button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #save-event {
+            background: #4caf50;
+            color: white;
+        }
+
+        #close-modal {
+            background: #f44336;
+            color: white;
+        }
+
+        .logo {
+            width: 50px;
+            margin-bottom: 10px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus icon'></i>
+            <div class="logo_name">CADI</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="eventos.html">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name" onclick="window.location.href='eventos.html'">Eventos</span>
+                </a>
+            </li>
+            <li>
+                <a href="analisis.html">
+                    <i class="bx bx-pie-chart-alt-2"></i>
+                    <span class="links_name" onclick="window.location.href='analisis.html'">Estadísticas</span>
+                </a>
+            </li>
+            <li>
+                <a href="horario.html">
+                    <i class='bx bx-time'></i>
+                    <span class="links_name" onclick="window.location.href='horario.html'">Horario</span>
+                </a>
+            </li>
+            <li>
+                <a href="recordatoriosIm.html">
+                    <i class='bx bx-bell'></i>
+                    <span class="links_name" onclick="window.location.href='recordatoriosIm.html'">Recordatorios</span>
+                </a>
+            </li>
+            <li>
+                <a href="ajustes.html">
+                    <i class="bx bx-cog"></i>
+                    <span class="links_name" onclick="window.location.href='ajustes.html'">Ajustes</span>
+                </a>
+            </li>
+            <li class="profile">
+                <a href="perfil.html">
+                    <img src="OIP.jpg" alt="profileImg">
+                    <span class="links_name" onclick="window.location.href='perfil.html'">Usuario</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Sección principal -->
+    <section class="home-section">
+        <div id="calendarView" class="calendar-view active">
+            <div class="calendar-header">
+                <button onclick="prevMonth()">&#10094;</button>
+                <h1 id="monthAndYear">Mes y Año</h1>
+                <button onclick="nextMonth()">&#10095;</button>
+            </div>
+            <div class="calendar-days">
+                <div>Dom</div>
+                <div>Lun</div>
+                <div>Mar</div>
+                <div>Mié</div>
+                <div>Jue</div>
+                <div>Vie</div>
+                <div>Sáb</div>
+            </div>
+            <div class="calendar-dates" id="calendarDates"></div>
+        </div>
+
+        <div id="tasks" class="tasks">
+            <h3>Tareas</h3>
+            <ul id="taskList"></ul>
+            <input type="text" id="taskInput" placeholder="Nueva tarea...">
+            <button onclick="addTask()">Agregar</button>
+        </div>
+
+        <div id="remindersView" class="reminders-view">
+            <h3>Recordatorios</h3>
+            <p>Lista de recordatorios importantes.</p>
+        </div>
+
+        <div id="profileContent" class="profile-content">
+            <h2>Perfil de Usuario</h2>
+            <img src="OIP.jpg" alt="Foto de perfil">
+            <button>Editar Perfil</button>
+        </div>
+        <!--inicia relacion de tareas-->
+        <!-- Modal para creación de eventos -->
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal" id="event-modal">
+            <h3 id="selected-day">Día seleccionado</h3>
+            <label for="event-time">Hora del evento:</label>
+            <input type="time" id="event-time">
+
+            <label for="event-alarm">¿Alarma?</label>
+            <select id="event-alarm">
+                <option value="yes">Sí</option>
+                <option value="no">No</option>
+            </select>
+
+            <label for="event-priority">Prioridad:</label>
+            <select id="event-priority">
+                <option value="high">Máxima</option>
+                <option value="medium">Media</option>
+                <option value="low">Mínima</option>
+            </select>
+
+            <label for="event-color">Color del evento:</label>
+            <input type="color" id="event-color" value="#ff6347">
+
+            <button id="save-event">Guardar Evento</button>
+            <button id="close-modal">Cancelar</button>
+        </div>
+    </section>
+    <script>
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+        });
+        // Cambiar vistas
+
+
+        // Inicializar calendario
+        let selectedDate = null;
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+        let tasks = {};
+
+        // Función para mostrar el calendario
+        function showCalendar(month, year) {
+            const monthAndYear = document.getElementById("monthAndYear");
+            monthAndYear.innerText = `${getMonthName(month)} ${year}`;
+
+            const calendarDates = document.getElementById("calendarDates");
+            calendarDates.innerHTML = "";
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement("div");
+                calendarDates.appendChild(emptyCell);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateElement = document.createElement("div");
+                dateElement.className = "date";
+                dateElement.innerText = day;
+                dateElement.onclick = () => selectDate(day);
+                if (selectedDate === `${year}-${month}-${day}`) {
+                    dateElement.classList.add("selected");
+                }
+                calendarDates.appendChild(dateElement);
+            }
+        }
+
+        // Otras funciones necesarias para el calendario
+        function getMonthName(month) {
+            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            return monthNames[month];
+        }
+
+        // Inicializar el calendario
+        document.addEventListener("DOMContentLoaded", () => {
+            showCalendar(currentMonth, currentYear);
+        });
+
+
+        // Funciones para cambiar de mes
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            showCalendar(currentMonth, currentYear);
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            showCalendar(currentMonth, currentYear);
+        }
+
+        // Seleccionar una fecha
+        function selectDate(day) {
+            selectedDate = `${currentYear}-${currentMonth}-${day}`;
+            document.getElementById("selectedDate").innerText = `Día ${day}`;
+            loadTasks();
+            showCalendar(currentMonth, currentYear);
+        }
+
+        // Agregar tarea
+        function addTask() {
+            const taskInput = document.getElementById("taskInput");
+            const taskText = taskInput.value.trim();
+            if (taskText === "") return;
+
+            if (!tasks[selectedDate]) {
+                tasks[selectedDate] = [];
+            }
+            tasks[selectedDate].push(taskText);
+            taskInput.value = "";
+            loadTasks();
+        }
+
+        // Cargar tareas
+        function loadTasks() {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+
+            if (tasks[selectedDate]) {
+                tasks[selectedDate].forEach((task, index) => {
+                    const taskItem = document.createElement("li");
+                    taskItem.innerText = task;
+                    taskList.appendChild(taskItem);
+                });
+            }
+        }
+        showCalendar(currentMonth, currentYear);
+
+        //tareas
+        // Referencias a los elementos
+        const modalOverlay = document.getElementById('modal-overlay');
+        const eventModal = document.getElementById('event-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const saveEventBtn = document.getElementById('save-event');
+        const selectedDayLabel = document.getElementById('selected-day');
+        const calendarDates = document.getElementById('calendarDates');
+
+        // Mostrar modal al hacer clic en un día
+        calendarDates.addEventListener('click', (e) => {
+            if (e.target.classList.contains('date')) {
+                const selectedDay = e.target.textContent;
+                selectedDayLabel.textContent = `Día seleccionado: ${selectedDay}`;
+                eventModal.style.display = 'block';
+                modalOverlay.style.display = 'block';
+            }
+        });
+
+        // Cerrar modal
+        closeModalBtn.addEventListener('click', () => {
+            eventModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        });
+
+        // Guardar evento
+        saveEventBtn.addEventListener('click', () => {
+            const eventTime = document.getElementById('event-time').value;
+            const eventAlarm = document.getElementById('event-alarm').value;
+            const eventColor = document.getElementById('event-color').value;
+
+            // Aplicar estilo al día seleccionado
+            const selectedDayElement = [...calendarDates.children].find(day =>
+                day.textContent === selectedDayLabel.textContent.split(': ')[1]
+            );
+            if (selectedDayElement) {
+                selectedDayElement.style.backgroundColor = eventColor;
+            }
+
+            // Ocultar modal
+            eventModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        });
+
+        let priorities = []; // Lista para almacenar prioridades de eventos
+
+        // Guardar evento con prioridad
+        document.getElementById("save-event").addEventListener("click", () => {
+            const time = document.getElementById("event-time").value;
+            const alarm = document.getElementById("event-alarm").value;
+            const color = document.getElementById("event-color").value;
+
+            // Añadir prioridad al evento
+            const event = {
+                date: selectedDate,
+                time,
+                alarm,
+                color,
+                priority,
+            };
+
+            priorities.push(event);
+            alert(`Evento guardado con prioridad ${priority}.`);
+            console.log("Lista de prioridades:", priorities);
+
+            closeModal(); // Cerrar el modal después de guardar
+        });
+
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById("event-modal").style.display = "none";
+            document.getElementById("modal-overlay").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

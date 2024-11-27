@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1d29;
+        }
+
+        .container {
+            background: #8a8a8a49;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .container h2 {
+            color: #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container form input {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .container form input:focus {
+            border-color: #00ffff;
+        }
+
+        .container form button {
+            background: #00ffffaf;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .container form button:hover {
+            background: #00ffff;
+        }
+
+        .container .link {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .container .link a {
+            color: #00ffff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .container .link a:hover {
+            color: #00ffff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Crear Cuenta</h2>
+        <form action="register.php" method="post" onsubmit="return validarFormulario()">
+            <input 
+                type="text" 
+                name="username" 
+                placeholder="Nombre de usuario" 
+                required 
+                minlength="3" 
+                title="El nombre de usuario debe tener al menos 3 caracteres.">
+            <input 
+                type="email" 
+                name="email" 
+                placeholder="Correo electrónico (ejemplo@dominio.com)" 
+                required 
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                title="Debe contener un @ y una terminación de dominio (ej. .com)">
+            <input 
+                type="password" 
+                name="password" 
+                placeholder="Contraseña (mínimo 8 caracteres)" 
+                required 
+                minlength="8" 
+                title="La contraseña debe tener al menos 8 caracteres.">
+            <input 
+                type="password" 
+                name="confirm_password" 
+                placeholder="Confirmar contraseña" 
+                required>
+            <button type="submit">Registrarse</button>
+        </form>
+        <div class="link">
+            ¿Ya tienes una cuenta? <a href="index.html">Inicia sesión aquí</a>
+        </div>
+    </div>
+
+    <script>
+        function validarFormulario() {
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const password = document.querySelector('input[name="password"]').value.trim();
+            const confirmPassword = document.querySelector('input[name="confirm_password"]').value.trim();
+
+            // Verificar campos vacíos
+            if (!email || !password || !confirmPassword) {
+                alert('Por favor, rellena todos los campos antes de continuar.');
+                return false;
+            }
+
+            // Verificar que las contraseñas coincidan
+            if (password !== confirmPassword) {
+                alert('Las contraseñas no coinciden. Por favor, verifica e inténtalo nuevamente.');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla de Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #1a1d29;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .rectangle-container {
+            position: relative;
+            width: 400px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .login-form h2 {
+            color: #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .login-form input[type="email"],
+        .login-form input[type="password"] {
+            text-align: center;
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            background-color: #1a1d29;
+            color: #fff;
+        }
+
+        .login-form input::placeholder {
+            color: #ccc;
+        }
+
+        .login-form button {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background-color: #00ffff;
+            color: #1a1d29;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-form button:hover {
+            background-color: #00e5e5;
+        }
+
+        .login-form a {
+            display: block;
+            margin-top: 10px;
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-form a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="rectangle-container">
+        <form class="login-form" onsubmit="return validarFormulario()" method="POST">
+            <h2>Iniciar Sesión</h2>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="Correo electrónico (ejemplo@dominio.com)" 
+                required 
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                title="Debe contener un @ y una terminación de dominio (ej. .com)">
+            <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="Contraseña (mínimo 8 caracteres)" 
+                required 
+                minlength="8"
+                title="Debe tener al menos 8 caracteres">
+            <button type="submit">Iniciar sesión</button>
+            <a href="crearCuenta.html">Crear cuenta</a>
+        </form>
+    </div>
+
+    <script>
+        async function validarFormulario() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!email || !password) {
+                alert('Por favor, completa todos los campos.');
+                return false;
+            }
+
+            try {
+                const response = await fetch('verificarCorreo.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.exito) {
+                    alert(data.mensaje);
+                    window.location.href = "index2.0.html"; // Redirige al sistema
+                } else {
+                    alert(data.mensaje);
+                }
+            } catch (error) {
+                console.error('Error al verificar las credenciales:', error);
+                alert('Ocurrió un error al verificar las credenciales. Inténtalo nuevamente.');
+            }
+
+            return false; // Prevenir el envío del formulario estándar
+        }
+    </script>
+</body>
+</html>

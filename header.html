@@ -1,0 +1,48 @@
+<header>
+    <header>
+        <div class="menu-icon">
+            ☰
+            <div class="dropdown">
+                <div class="nav-item" onclick="window.location.href='eventos.html'">Eventos</div>
+                <div class="nav-item" onclick="showView('remindersView')">Estadísticas</div>
+                <div class="nav-item" onclick="showView('scheduleView')">Horario</div>
+                <div class="nav-item" onclick="showView('calendarView')">Calendario</div>
+                <div class="nav-item" onclick="showView('helpView')">Ayuda</div>
+                <div class="nav-item" onclick="window.location.href='ajustes.html'">Ajustes</div>
+            </div>
+        </div>
+        <div class="profile-icon" onclick="loadPerfil()">
+            <img src="OIP.jpg" alt="Perfil">
+        </div>
+    </header>
+  
+  <style>
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ddd;
+      background-color: #ffffff;
+    }
+  
+    .menu-icon, .profile-icon img {
+      cursor: pointer;
+      font-size: 24px;
+    }
+  
+    .menu-icon {
+      font-size: 24px;
+    }
+  
+    .profile-icon img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+  
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+  </style>

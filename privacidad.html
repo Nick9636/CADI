@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviso de Privacidad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 78px;
+            background: #1a1d29;
+            padding: 6px 14px;
+            z-index: 100;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar .logo-details {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            font-size: 28px;
+            color: #fff;
+            margin-right: 10px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            right: 10px;
+            font-size: 23px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar ul.nav-list {
+            margin-top: 20px;
+        }
+
+        .sidebar ul.nav-list li {
+            position: relative;
+            list-style: none;
+            margin: 8px 0;
+        }
+
+        .sidebar ul.nav-list li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            color: #fff;
+            transition: all 0.4s ease;
+        }
+
+        .sidebar ul.nav-list li a:hover {
+            background: #575757;
+        }
+
+        .sidebar ul.nav-list li i {
+            font-size: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .sidebar ul.nav-list li .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open ul.nav-list li .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Estilos del perfil */
+        .profile {
+            margin-top: auto;
+            /* Para posicionarlo al final */
+        }
+
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            transition: all 0.4s ease;
+        }
+
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open .profile .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Sección principal */
+        .home-section {
+            position: relative;
+            left: 78px;
+            width: calc(100% - 78px);
+            height: 100vh;
+            background: #f5f5f5;
+            transition: all 0.5s ease;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sidebar.open~.home-section {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .home-section .text {
+            font-size: 25px;
+            font-weight: 500;
+            color: #11101d;
+        }
+
+        .container {
+            width: 500px;
+            padding: 20px;
+            background-color: #f2f4ff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            text-align: left;
+            max-height: 300px;
+            overflow-y: scroll;
+            background-color: #e8ebf9;
+            padding: 15px;
+            align-items: center;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            color: white;
+        }
+
+        .accept-btn {
+            background-color: #4caf50;
+        }
+
+        .cancel-btn {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus icon'></i>
+            <div class="logo_name">CADI</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="#">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name" onclick="window.location.href='eventos.html'">Eventos</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bx bx-pie-chart-alt-2"></i>
+                    <span class="links_name" onclick="window.location,href='analisis.html'">Estadísticas</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bx-time'></i>
+                    <span class="links_name" onclick="window.location.href='horario.html'">Horario</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="showView('remindersView')">
+                    <i class='bx bx-bell'></i>
+                    <span class="links_name" onclick="window.location.href='recordatoriosIm.html'">Recordatorios</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bx bx-cog"></i>
+                    <span class="links_name" onclick="window.location.href='ajustes.html'">Ajustes</span>
+                </a>
+            </li>
+            <li class="profile">
+                <a href="#">
+                    <img src="OIP.jpg" alt="profileImg">
+                    <span class="links_name" onclick="window.location.href='perfil.html'">Usuario</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <section class="home-section">
+        <div class="container">
+            <div class="title">Aviso de Privacidad</div>
+            <div class="content">
+                <p>Este documento describe cómo CADI recopila, utiliza y comparte su información personal cuando utiliza
+                    nuestros servicios...</p>
+                <p><strong>Responsable del Tratamiento de sus Datos Personales:</strong><br>CADI<br>Domicilio: Calle
+                    Revolución N.100B<br>Teléfono: 2462957767<br>Correo Electrónico: cadiapp@gmail.com</p>
+                <p><strong>Finalidades del Tratamiento</strong> Utilizamos su información personal para los siguientes
+                    propósitos:</p>
+                <p><strong>Finalidades Primarias:</strong><br>• Proporcionar y mejorar nuestros servicios: Utilizamos su
+                    información para proporcionar nuestros servicios y mejorar su experiencia de usuario...</p>
+                <p>• Proteger nuestros servicios: Podemos utilizar su información para proteger nuestros servicios y
+                    usuarios...</p>
+                <p><strong>Mecanismos para Manifestar Negativa para Finalidades Secundarias o Accesorias:</strong> Usted
+                    puede manifestar su negativa para el tratamiento de sus datos personales...</p>
+            </div>
+            <div class="buttons">
+                <button class="accept-btn" onclick="acceptPrivacy()">Aceptar</button>
+                <button class="cancel-btn" onclick="cancelPrivacy()">Cancelar</button>
+            </div>
+        </div>
+    </section>
+    <script>
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+        });
+        function acceptPrivacy() {
+            alert("Has aceptado el aviso de privacidad.");
+            // Aquí puedes redirigir a otra página si es necesario
+            // window.location.href = "pagina_aceptar.html";
+        }
+
+        function cancelPrivacy() {
+            alert("Has rechazado el aviso de privacidad.");
+            // Aquí puedes redirigir a otra página o cerrar el aviso
+            // window.location.href = "pagina_cancelar.html";
+        }
+    </script>
+
+</body>
+
+</html>

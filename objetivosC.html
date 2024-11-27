@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Editar Perfil de Usuario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 78px;
+            background: #1a1d29;
+            padding: 6px 14px;
+            z-index: 100;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar .logo-details {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            font-size: 28px;
+            color: #fff;
+            margin-right: 10px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            right: 10px;
+            font-size: 23px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar ul.nav-list {
+            margin-top: 20px;
+        }
+
+        .sidebar ul.nav-list li {
+            position: relative;
+            list-style: none;
+            margin: 8px 0;
+        }
+
+        .sidebar ul.nav-list li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            color: #fff;
+            transition: all 0.4s ease;
+        }
+
+        .sidebar ul.nav-list li a:hover {
+            background: #575757;
+        }
+
+        .sidebar ul.nav-list li i {
+            font-size: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .sidebar ul.nav-list li .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open ul.nav-list li .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Estilos del perfil */
+        .profile {
+            margin-top: auto;
+            /* Para posicionarlo al final */
+        }
+
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            transition: all 0.4s ease;
+        }
+
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open .profile .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Sección principal */
+        .home-section {
+            position: relative;
+            left: 78px;
+            width: calc(100% - 78px);
+            height: 100vh;
+            background: #f5f5f5;
+            transition: all 0.5s ease;
+            padding: 20px;
+        }
+
+        .sidebar.open~.home-section {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .home-section .text {
+            font-size: 25px;
+            font-weight: 500;
+            color: #11101d;
+        }
+
+        .user-profile {
+            display: none;
+            /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-content {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 250px;
+        }
+
+        .profile-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .user-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f095c;
+            margin-bottom: 15px;
+        }
+
+        .profile-options button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #3335ca;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-options button:hover {
+            background-color: #301fa5;
+        }
+        /* Tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table thead {
+            background: #3335ca;
+            color: #fff;
+        }
+
+        table th, 
+        table td {
+            padding: 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        table tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background: #ececec;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus icon'></i>
+            <div class="logo_name">CADI</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="eventos.html">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name" onclick="window.location.href='eventos.html'">Eventos</span>
+                </a>
+            </li>
+            <li>
+                <a href="index2.0.html">
+                    <i class="bx bx-calendar"></i>
+                    <span class="links_name" onclick="window.location.href='index2.0.html'">Calendario</span>
+                </a>
+            </li>
+            <li>
+                <a href="analisis.html">
+                    <i class="bx bx-pie-chart-alt-2"></i>
+                    <span class="links_name" onclick="window.location,href='analisis.html'">Estadísticas</span>
+                </a>
+            </li>
+            <li>
+                <a href="horario.html">
+                    <i class='bx bx-time'></i>
+                    <span class="links_name" onclick="wondow.location.href='horario.html'">Horario</span>
+                </a>
+            </li>
+            <li>
+                <a href="recordatoriosIm.html">
+                    <i class='bx bx-bell'></i>
+                    <span class="links_name" onclick="window.location.href='recordatoriosIm.html'">Recordatorios</span>
+                </a>
+            </li>
+            <li>
+                <a href="ajustes.html">
+                    <i class="bx bx-cog"></i>
+                    <span class="links_name" onclick="window.location.href='ajustes.html'">Ajustes</span>
+                </a>
+            </li>
+            <li class="profile">
+                <a href="perfil.html">
+                    <img src="OIP.jpg" alt="profileImg">
+                    <span class="links_name" onclick="window.location.href='perfil.html'">Usuario</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <section class="home-section">
+        <div id="goalsScreen" class="screen">
+            <h2>Objetivos Completos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Actividad</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Reunión de equipo</td>
+                        <td>20/11/2024</td>
+                        <td>14:00</td>
+                    </tr>
+                    <tr>
+                        <td>Entrega de proyecto</td>
+                        <td>19/11/2024</td>
+                        <td>10:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <script>
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+        });
+    </script>
+</body>
+
+</html>

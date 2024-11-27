@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos Cercanos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 78px;
+            background: #1a1d29;
+            padding: 6px 14px;
+            z-index: 100;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar .logo-details {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            font-size: 28px;
+            color: #fff;
+            margin-right: 10px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            right: 10px;
+            font-size: 23px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar ul.nav-list {
+            margin-top: 20px;
+        }
+
+        .sidebar ul.nav-list li {
+            position: relative;
+            list-style: none;
+            margin: 8px 0;
+        }
+
+        .sidebar ul.nav-list li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            color: #fff;
+            transition: all 0.4s ease;
+        }
+
+        .sidebar ul.nav-list li a:hover {
+            background: #575757;
+        }
+
+        .sidebar ul.nav-list li i {
+            font-size: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .sidebar ul.nav-list li .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open ul.nav-list li .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Estilos del perfil */
+        .profile {
+            margin-top: auto;
+            /* Para posicionarlo al final */
+        }
+
+        .profile a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            transition: all 0.4s ease;
+        }
+
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open .profile .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Sección principal */
+        .home-section {
+            position: relative;
+            left: 78px;
+            width: calc(100% - 78px);
+            height: 100vh;
+            background: #f5f5f5;
+            transition: all 0.5s ease;
+            padding: 20px;
+        }
+
+        .sidebar.open~.home-section {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .home-section .text {
+            font-size: 25px;
+            font-weight: 500;
+            color: #11101d;
+        }
+
+        /*tarjetas*/
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        .card {
+            background-color: #1e1e2f;
+            color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .details {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .details span {
+            font-weight: bold;
+        }
+
+        .priority {
+            margin-top: 10px;
+            font-size: 14px;
+            padding: 5px 10px;
+            display: inline-block;
+            border-radius: 8px;
+            color: #fff;
+        }
+
+        .priority.alta {
+            background-color: #e63946;
+        }
+
+        .priority.media {
+            background-color: #f4a261;
+        }
+
+        .priority.baja {
+            background-color: #2a9d8f;
+        }
+
+        .screen-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e1e2f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxl-c-plus-plus icon'></i>
+            <div class="logo_name">CADI</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="PaginaP.html">
+                    <i class='bx bx-calendar'></i>
+                    <span class="links_name" onclick="window.location.href='PaginaP.html'">Calendario</span>
+                </a>
+            </li>
+            <li>
+                <a href="analisis.html">
+                    <i class="bx bx-pie-chart-alt-2"></i>
+                    <span class="links_name" onclick="window.location,href='analisis.html'">Estadísticas</span>
+                </a>
+            </li>
+            <li>
+                <a href="horario.html">
+                    <i class='bx bx-time'></i>
+                    <span class="links_name" onclick="window.location.href='horario.html'">Horario</span>
+                </a>
+            </li>
+            <li>
+                <a href="recordatoriosIm.html">
+                    <i class='bx bx-bell'></i>
+                    <span class="links_name" onclick="window.location.href='recordatoriosIm.html'">Recordatorios</span>
+                </a>
+            </li>
+            <li>
+                <a href="ajustes.html">
+                    <i class="bx bx-cog"></i>
+                    <span class="links_name" onclick="window.location.href='ajustes.html'">Ajustes</span>
+                </a>
+            </li>
+            <li class="profile">
+                <a href="perfil.htmls">
+                    <img src="OIP.jpg" alt="profileImg">
+                    <span class="links_name" onclick="window.location.href='perfil.html'">Usuario</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Contenido principal -->
+    <section class="home-section">
+        <div class="container">
+            <div class="screen-title">Eventos Cercanos</div>
+
+            <div class="card">
+                <h2>Evento: Presentación de Proyecto</h2>
+                <div class="details">
+                    <p><span>Día:</span> 24 de Noviembre</p>
+                    <p><span>Hora:</span> 02:00 PM</p>
+                </div>
+                <div class="priority alta">Prioridad: Alta</div>
+            </div>
+
+            <div class="card">
+                <h2>Evento: Almuerzo con Cliente</h2>
+                <div class="details">
+                    <p><span>Día:</span> 23 de Noviembre</p>
+                    <p><span>Hora:</span> 12:30 PM</p>
+                </div>
+                <div class="priority baja">Prioridad: Baja</div>
+            </div>
+        </div>
+    </section>
+    <script>
+        const sidebar = document.querySelector(".sidebar");
+        const btn = document.querySelector("#btn");
+        btn.addEventListener("click", () => {
+          sidebar.classList.toggle("open");
+        });
+      </script>
+</body>
+
+</html>
