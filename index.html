@@ -102,15 +102,42 @@
                 required 
                 minlength="8"
                 title="Debe tener al menos 8 caracteres">
-            <button onclick="login()">Iniciar sesión</button>
+            <button type="submit">Iniciar sesión</button>
             <a href="crearCuenta.html">Crear cuenta</a>
         </form>
     </div>
 
     <script>
-        function login() {
-            // Simular inicio de sesión. Aquí puedes agregar validaciones adicionales si lo necesitas.
-            window.location.href = "PaginaP.html";
+        async function validarFormulario() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!email || !password) {
+                alert('Por favor, completa todos los campos.');
+                return false;
+            }
+
+            try {
+                const response = await fetch('verificarCorreo.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.exito) {
+                    alert(data.mensaje);
+                    window.location.href = "PaginaP.html"; // Redirige al sistema
+                } else {
+                    alert(data.mensaje);
+                }
+            } catch (error) {
+                console.error('Error al verificar las credenciales:', error);
+                alert('Ocurrió un error al verificar las credenciales. Inténtalo nuevamente.');
+            }
+
+            return false; // Prevenir el envío del formulario estándar
         }
     </script>
 </body>
