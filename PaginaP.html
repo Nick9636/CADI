@@ -166,7 +166,7 @@
             left: 78px;
             width: calc(100% - 78px);
             height: 100vh;
-            background: #3058dbb9;
+            background: #4168eba4;
             transition: all 0.5s ease;
             padding: 20px;
         }
@@ -258,11 +258,6 @@
             background: #ddd;
         }
 
-        .calendar-dates .selected {
-            background: #ff6347;
-            color: #fff;
-        }
-
         /* Estilos del modal (tareas)*/
         .modal-overlay {
             position: fixed;
@@ -305,7 +300,7 @@
             width: 100%;
             padding: 8px;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
+            border: 1px solid #dddddd;
             border-radius: 5px;
         }
 
@@ -318,12 +313,12 @@
         }
 
         #save-event {
-            background: #4caf50;
+            background: #201a77;
             color: white;
         }
 
         #close-modal {
-            background: #f44336;
+            background: #309fca;
             color: white;
         }
 
@@ -332,6 +327,86 @@
             margin-bottom: 10px;
             border-radius: 50%;
         }
+
+        .day {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #ccc;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+          }
+          
+          #event-info {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+          }
+          
+          #add-event-modal {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+          }
+          #event-info {
+            background: #fff;
+            padding: 15px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        #event-info button {
+            background: #0f0475;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        
+        #event-info button:hover {
+            background: #4a6ff1;
+        }
+        
+        .modal {
+            width: 90%;
+            max-width: 400px;
+            text-align: left;
+        }
+        
+        .modal h3 {
+            margin-bottom: 10px;
+            font-size: 24px;
+            text-align: center;
+        }
+        
+        .modal input,
+        .modal select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #075f92;
+            border-radius: 5px;
+        }
+        
+        .modal-actions {
+            text-align: center;
+        }
+        
+        .modal-actions button {
+            margin: 5px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
     </style>
 </head>
 
@@ -402,31 +477,27 @@
             </div>
             <div class="calendar-dates" id="calendarDates"></div>
         </div>
-
-        <div id="tasks" class="tasks">
-            <h3>Tareas</h3>
-            <ul id="taskList"></ul>
-            <input type="text" id="taskInput" placeholder="Nueva tarea...">
-            <button onclick="addTask()">Agregar</button>
-        </div>
-
-        <div id="remindersView" class="reminders-view">
-            <h3>Recordatorios</h3>
-            <p>Lista de recordatorios importantes.</p>
-        </div>
-
-        <div id="profileContent" class="profile-content">
-            <h2>Perfil de Usuario</h2>
-            <img src="OIP.jpg" alt="Foto de perfil">
-            <button>Editar Perfil</button>
-        </div>
-        <!--inicia relacion de tareas-->
+        
+        <div id="event-info">
+            <h3>Eventos del día</h3>
+            <div id="events-list">Selecciona un día para ver los eventos</div>
+            <button onclick="openModal()">Agregar nuevo evento</button>
+          </div>
         <!-- Modal para creación de eventos -->
-        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-overlay" id="modal-overlay" style="display: none;"></div>
         <div class="modal" id="event-modal">
             <h3 id="selected-day">Día seleccionado</h3>
-            <label for="event-time">Hora del evento:</label>
-            <input type="time" id="event-time">
+            <label for="event-name">Nombre del evento:</label>
+            <input type="text" id="event-name">
+            
+            <label>
+                Todo el día:
+                <input type="checkbox" id="all-day" onchange="toggleTimeOptions()" />
+              </label>
+              <div id="time-options">
+                <label>Hora de inicio: <input type="time" id="start-time" /></label>
+                <label>Hora de fin: <input type="time" id="end-time" /></label>
+              </div>
 
             <label for="event-alarm">¿Alarma?</label>
             <select id="event-alarm">
@@ -436,18 +507,16 @@
 
             <label for="event-priority">Prioridad:</label>
             <select id="event-priority">
-                <option value="high">Máxima</option>
+                <option value="high">Alta</option>
                 <option value="medium">Media</option>
-                <option value="low">Mínima</option>
+                <option value="low">Baja</option>
             </select>
 
-            <label for="event-color">Color del evento:</label>
-            <input type="color" id="event-color" value="#ff6347">
-
-            <button id="save-event">Guardar Evento</button>
-            <button id="close-modal">Cancelar</button>
+            <button id="save-event" onclick="saveEvent()">Guardar Evento</button>
+            <button id="close-modal" onclick="closeModal()">Cancelar</button>
         </div>
     </section>
+
     <script>
         let sidebar = document.querySelector(".sidebar");
         let closeBtn = document.querySelector("#btn");
@@ -462,9 +531,9 @@
         let selectedDate = null;
         let currentYear = new Date().getFullYear();
         let currentMonth = new Date().getMonth();
-        let tasks = {};
+        const events = {};
 
-        // Función para mostrar el calendario
+        // Mostrar calendario
         function showCalendar(month, year) {
             const monthAndYear = document.getElementById("monthAndYear");
             monthAndYear.innerText = `${getMonthName(month)} ${year}`;
@@ -485,26 +554,20 @@
                 dateElement.className = "date";
                 dateElement.innerText = day;
                 dateElement.onclick = () => selectDate(day);
-                if (selectedDate === `${year}-${month}-${day}`) {
-                    dateElement.classList.add("selected");
+                if (events[`${year}-${month}-${day}`]) {
+                    dateElement.style.backgroundColor = "#ff6347"; // Marcar días con eventos
                 }
                 calendarDates.appendChild(dateElement);
             }
         }
 
-        // Otras funciones necesarias para el calendario
+        // Obtener nombre del mes
         function getMonthName(month) {
             const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             return monthNames[month];
         }
 
-        // Inicializar el calendario
-        document.addEventListener("DOMContentLoaded", () => {
-            showCalendar(currentMonth, currentYear);
-        });
-
-
-        // Funciones para cambiar de mes
+        // Navegar entre meses
         function prevMonth() {
             currentMonth--;
             if (currentMonth < 0) {
@@ -523,116 +586,153 @@
             showCalendar(currentMonth, currentYear);
         }
 
-        // Seleccionar una fecha
-        function selectDate(day) {
-            selectedDate = `${currentYear}-${currentMonth}-${day}`;
-            document.getElementById("selectedDate").innerText = `Día ${day}`;
-            loadTasks();
-            showCalendar(currentMonth, currentYear);
-        }
+        function saveEvent() {
+    const eventName = document.getElementById("event-name").value;
+    const allDay = document.getElementById("all-day").checked;
+    const startTime = document.getElementById("start-time").value;
+    const endTime = document.getElementById("end-time").value;
+    const priority = document.getElementById("event-priority").value;
 
-        // Agregar tarea
-        function addTask() {
-            const taskInput = document.getElementById("taskInput");
-            const taskText = taskInput.value.trim();
-            if (taskText === "") return;
+    if (!selectedDate || !eventName) {
+        alert("Selecciona un día y escribe un nombre para el evento.");
+        return;
+    }
 
-            if (!tasks[selectedDate]) {
-                tasks[selectedDate] = [];
-            }
-            tasks[selectedDate].push(taskText);
-            taskInput.value = "";
-            loadTasks();
-        }
+    // Crear el evento
+    const event = {
+        name: eventName,
+        allDay,
+        startTime,
+        endTime,
+        priority,
+    };
 
-        // Cargar tareas
-        function loadTasks() {
-            const taskList = document.getElementById("taskList");
-            taskList.innerHTML = "";
+    // Guardar el evento en el objeto `events`
+    if (!events[selectedDate]) {
+        events[selectedDate] = [];
+    }
+    events[selectedDate].push(event);
 
-            if (tasks[selectedDate]) {
-                tasks[selectedDate].forEach((task, index) => {
-                    const taskItem = document.createElement("li");
-                    taskItem.innerText = task;
-                    taskList.appendChild(taskItem);
-                });
-            }
-        }
-        showCalendar(currentMonth, currentYear);
+    // Actualizar el día en el calendario
+    updateDayInCalendar(selectedDate);
 
-        //tareas
-        // Referencias a los elementos
-        const modalOverlay = document.getElementById('modal-overlay');
-        const eventModal = document.getElementById('event-modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const saveEventBtn = document.getElementById('save-event');
-        const selectedDayLabel = document.getElementById('selected-day');
-        const calendarDates = document.getElementById('calendarDates');
+    // Limpiar el modal
+    closeModal();
+    clearModal();
+}
 
-        // Mostrar modal al hacer clic en un día
-        calendarDates.addEventListener('click', (e) => {
-            if (e.target.classList.contains('date')) {
-                const selectedDay = e.target.textContent;
-                selectedDayLabel.textContent = `Día seleccionado: ${selectedDay}`;
-                eventModal.style.display = 'block';
-                modalOverlay.style.display = 'block';
-            }
+// Actualizar el día en el calendario
+function updateDayInCalendar(date) {
+    const dayElement = document.querySelector(`.day[data-date="${date}"]`);
+    if (dayElement) {
+        dayElement.classList.add("has-event");
+
+        // Limpiar círculos de prioridad
+        dayElement.querySelectorAll(".priority-circle").forEach(circle => circle.remove());
+
+        // Agregar círculos según la prioridad
+        events[date].forEach(event => {
+            const circle = document.createElement("div");
+            circle.classList.add("priority-circle");
+            if (event.priority === "high") circle.classList.add("priority-high");
+            else if (event.priority === "medium") circle.classList.add("priority-medium");
+            else if (event.priority === "low") circle.classList.add("priority-low");
+            dayElement.appendChild(circle);
         });
+    }
+}
 
-        // Cerrar modal
-        closeModalBtn.addEventListener('click', () => {
-            eventModal.style.display = 'none';
-            modalOverlay.style.display = 'none';
-        });
+// Limpiar el modal
+function clearModal() {
+    document.getElementById("event-name").value = "";
+    document.getElementById("all-day").checked = false;
+    document.getElementById("start-time").value = "";
+    document.getElementById("end-time").value = "";
+    document.getElementById("event-priority").value = "medium";
+}
+
+// Abrir y cerrar el modal
+function openModal() {
+    document.getElementById("event-modal").style.display = "block";
+    document.getElementById("modal-overlay").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("event-modal").style.display = "none";
+    document.getElementById("modal-overlay").style.display = "none";
+    clearModal(); // Limpia los campos al cerrar
+}
+
+        // Alternar entrada de hora
+        function toggleTimeInput(value) {
+            const timeInputContainer = document.getElementById("time-input-container");
+            timeInputContainer.style.display = value === "no" ? "block" : "none";
+        }
 
         // Guardar evento
-        saveEventBtn.addEventListener('click', () => {
-            const eventTime = document.getElementById('event-time').value;
-            const eventAlarm = document.getElementById('event-alarm').value;
-            const eventColor = document.getElementById('event-color').value;
+        function saveEvent() {
+            const eventName = document.getElementById("event-name").value;
+            const isAllDay = document.getElementById("event-all-day").value === "yes";
+            const eventTime = isAllDay ? "Todo el día" : document.getElementById("event-time").value;
+            const eventAlarm = document.getElementById("event-alarm").value === "yes";
+            const eventPriority = document.getElementById("event-priority").value;
 
-            // Aplicar estilo al día seleccionado
-            const selectedDayElement = [...calendarDates.children].find(day =>
-                day.textContent === selectedDayLabel.textContent.split(': ')[1]
-            );
-            if (selectedDayElement) {
-                selectedDayElement.style.backgroundColor = eventColor;
+            if (!eventName) {
+                alert("El nombre del evento es obligatorio.");
+                return;
             }
 
-            // Ocultar modal
-            eventModal.style.display = 'none';
-            modalOverlay.style.display = 'none';
-        });
-
-        let priorities = []; // Lista para almacenar prioridades de eventos
-
-        // Guardar evento con prioridad
-        document.getElementById("save-event").addEventListener("click", () => {
-            const time = document.getElementById("event-time").value;
-            const alarm = document.getElementById("event-alarm").value;
-            const color = document.getElementById("event-color").value;
-
-            // Añadir prioridad al evento
-            const event = {
-                date: selectedDate,
-                time,
-                alarm,
-                color,
-                priority,
-            };
-
-            priorities.push(event);
-            alert(`Evento guardado con prioridad ${priority}.`);
-            console.log("Lista de prioridades:", priorities);
-
-            closeModal(); // Cerrar el modal después de guardar
-        });
-
-        // Función para cerrar el modal
-        function closeModal() {
-            document.getElementById("event-modal").style.display = "none";
-            document.getElementById("modal-overlay").style.display = "none";
+            events[selectedDate] = { name: eventName, time: eventTime, alarm: eventAlarm, priority: eventPriority };
+            closeModal();
+            showCalendar(currentMonth, currentYear);
+            alert("Evento guardado correctamente.");
         }
+
+        function selectDate(date) {
+            selectedDate = date;
+            document.getElementById("event-info").style.display = "block";
+            document.getElementById("events-list").innerText = `Eventos para el ${date}`;
+        }
+        
+        function openAddEventModal() {
+            if (!selectedDate) {
+                alert("Por favor, selecciona un día primero.");
+                return;
+            }
+            document.getElementById("modal-overlay").style.display = "block";
+            document.getElementById("event-modal").style.display = "block";
+            document.getElementById("selected-day-label").innerText = selectedDate;
+        }
+        
+        function closeModal() {
+            document.getElementById("modal-overlay").style.display = "none";
+            document.getElementById("event-modal").style.display = "none";
+        }
+        
+        function saveEvent() {
+            const eventName = document.getElementById("event-name").value;
+            if (eventName.trim() === "") {
+                alert("El nombre del evento no puede estar vacío.");
+                return;
+            }
+            const allDay = document.getElementById("all-day").checked;
+            const startTime = document.getElementById("start-time").value;
+            const endTime = document.getElementById("end-time").value;
+        
+            let eventDetails = allDay
+                ? "Todo el día"
+                : `De ${startTime} a ${endTime}`;
+        
+            document.getElementById("events-list").innerHTML += `<p>${eventName} (${eventDetails})</p>`;
+            closeModal();
+        }
+
+        
+
+        // Inicializar
+        document.addEventListener("DOMContentLoaded", () => {
+            showCalendar(currentMonth, currentYear);
+        });
     </script>
 </body>
 
