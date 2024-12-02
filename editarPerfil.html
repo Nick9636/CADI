@@ -19,83 +19,147 @@
         body {
             display: flex;
             min-height: 100vh;
-            background-color: #f9f9f9;
+            background-color: #282d41;
             color: #333;
         }
 
+        /* Sidebar */
         /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
-            width: 80px;
             height: 100%;
-            background: #1a1d29;
-            padding: 10px 14px;
-            transition: all 0.3s ease;
+            width: 78px;
+            background: #11101d;
+            padding: 6px 14px;
+            z-index: 100;
+            transition: all 0.5s ease;
         }
 
         .sidebar.open {
-            width: 220px;
+            width: 250px;
         }
 
         .sidebar .logo-details {
+            height: 60px;
             display: flex;
             align-items: center;
-            height: 60px;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            font-size: 28px;
             color: #fff;
+            margin-right: 10px;
+            opacity: 0;
+            transition: all 0.5s ease;
         }
 
         .sidebar .logo-details .logo_name {
-            margin-left: 10px;
-            font-size: 18px;
-            font-weight: bold;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.5s ease;
         }
 
+        .sidebar.open .logo-details .icon,
         .sidebar.open .logo-details .logo_name {
             opacity: 1;
         }
 
-        .sidebar ul {
+        .sidebar .logo-details #btn {
+            position: absolute;
+            right: 10px;
+            font-size: 23px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar ul.nav-list {
             margin-top: 20px;
+        }
+
+        .sidebar ul.nav-list li {
+            position: relative;
             list-style: none;
+            margin: 8px 0;
         }
 
-        .sidebar ul li {
-            margin: 10px 0;
+        .sidebar ul.nav-list li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            color: #fff;
+            transition: all 0.4s ease;
         }
 
-        .sidebar ul li a {
+        .sidebar ul.nav-list li a:hover {
+            background: #575757;
+        }
+
+        .sidebar ul.nav-list li i {
+            font-size: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .sidebar ul.nav-list li .links_name {
+            font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar.open ul.nav-list li .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Estilos del perfil */
+        .profile {
+            margin-top: auto; /* Para posicionarlo al final */
+        }
+
+        .profile a {
             display: flex;
             align-items: center;
             text-decoration: none;
             color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            transition: background 0.3s;
+            height: 50px;
+            border-radius: 12px;
+            padding: 0 10px;
+            transition: all 0.4s ease;
         }
 
-        .sidebar ul li a:hover {
-            background: #575757;
+        .profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
-        .sidebar ul li a i {
-            font-size: 24px;
-        }
-
-        .sidebar ul li a span {
-            margin-left: 10px;
+        .profile .links_name {
             font-size: 16px;
+            margin-left: 10px;
+            white-space: nowrap;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
         }
 
-        .sidebar.open ul li a span {
+        .sidebar.open .profile .links_name {
             opacity: 1;
+            pointer-events: auto;
         }
-
         /* Main content */
         .home-section {
             margin-left: 80px;
@@ -112,7 +176,7 @@
         .home-section h2 {
             font-size: 24px;
             margin-bottom: 20px;
-            color: #444;
+            color: #e0dbdb;
         }
 
         .edit-profile-form {
@@ -161,16 +225,47 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bxl-c-plus-plus'></i>
-            <span class="logo_name">CADI</span>
+            <i class='bx bxl-c-plus-plus icon'></i>
+            <div class="logo_name">CADI</div>
+            <i class='bx bx-menu' id="btn"></i>
         </div>
-        <ul>
-            <li><a href="eventos.html"><i class='bx bx-grid-alt'></i> <span>Eventos</span></a></li>
-            <li><a href="PaginaP.html"><i class="bx bx-calendar"></i> <span>Calendario</span></a></li>
-            <li><a href="analisis.html"><i class="bx bx-pie-chart-alt-2"></i> <span>Estadísticas</span></a></li>
-            <li><a href="horario.html"><i class='bx bx-time'></i> <span>Horario</span></a></li>
-            <li><a href="recordatoriosIm.html"><i class='bx bx-bell'></i> <span>Recordatorios</span></a></li>
-            <li><a href="ajustes.html"><i class="bx bx-cog"></i> <span>Ajustes</span></a></li>
+        <ul class="nav-list">
+            <li>
+                <a href="PaginaP.html">
+                    <i class='bx bx-calendar'></i>
+                    <span class="links_name" onclick="window.location.href='PaginaP.html'">Calendario</span>
+                </a>
+            </li>
+            <li>
+                <a href="eventos.html">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name" onclick="window.location.href='eventos.html'">Eventos</span>
+                </a>
+            </li>
+            <li>
+                <a href="analisis.html">
+                    <i class="bx bx-pie-chart-alt-2"></i>
+                    <span class="links_name" onclick="window.location.href='analisis.html'">Estadísticas</span>
+                </a>
+            </li>
+            <li>
+                <a href="recordatoriosIm.html">
+                  <i class='bx bx-bell'></i>
+                  <span class="links_name" onclick="window.location.href='recordatoriosIm.html'">Recordatorios</span>
+                </a>
+              </li>
+            <li>
+                <a href="ajustes.html">
+                    <i class="bx bx-cog"></i>
+                    <span class="links_name" onclick="window.location.href='ajustes.html'">Ajustes</span>
+                </a>
+            </li>
+            <li class="profile">
+                <a href="perfil.html">
+                    <img src="OIP.jpg" alt="profileImg">
+                    <span class="links_name" onclick="window.location.href='perfil.html'">Usuario</span>
+                </a>
+            </li>
         </ul>
     </div>
 
