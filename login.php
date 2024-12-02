@@ -1,29 +1,30 @@
-<?php
-// Datos simulados de la "base de datos"
-$usuarios = [
-    ['email' => 'usuario1@example.com', 'password' => '12345678'],
-    ['email' => 'usuario2@example.com', 'password' => 'contraseña'],
-    ['email' => 'admin@example.com', 'password' => 'admin123']
-];
+$host = 'localhost'; // Cambiar si es necesario
+$dbname = 'mi_sistema'; // Nombre de la base de datos
+$username = 'root'; // Usuario de la base de datos
+$password = ''; // Contraseña del usuario
+
+// Conexión a la base de datos
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Error de conexión: " . $e->getMessage());
+}
 
 // Obtener datos enviados por el formulario
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
-// Buscar el usuario en la base de datos
-$usuarioEncontrado = false;
-
-foreach ($usuarios as $usuario) {
-    if ($usuario['email'] === $email && $usuario['password'] === $password) {
-        $usuarioEncontrado = true;
-        break;
-    }
-}
+// Consulta para buscar el usuario
+$sql = "SELECT * FROM usuarios WHERE email = :email AND password = :password";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['email' => $email, 'password' => $password]);
+$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Validar credenciales
-if ($usuarioEncontrado) {
+if ($usuario) {
     // Credenciales correctas
-    echo "<h1>¡Bienvenido, $email!</h1>";
+    echo "<h1>¡Bienvenido, {$usuario['email']}!</h1>";
     echo "<p>Inicio de sesión exitoso.</p>";
     echo '<a href="index2.0.html">Ir al sistema</a>';
 } else {
