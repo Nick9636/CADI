@@ -118,7 +118,7 @@
                 name="confirm_password" 
                 placeholder="Confirmar contraseña" 
                 required>
-            <button onclick="window.location.href = 'PaginaP.html'">Registrarse</button>
+            <button type="submit">Registrarse</button>
         </form>
         <div class="link">
             ¿Ya tienes una cuenta? <a href="index.html">Inicia sesión aquí</a>
@@ -126,11 +126,7 @@
     </div>
 
     <script>
-        function login() {
-            // Simular inicio de sesión. Aquí puedes agregar validaciones adicionales si lo necesitas.
-            window.location.href = "in.html";
-        }
-        /*function validarFormulario() {
+        function validarFormulario() {
             const email = document.querySelector('input[name="email"]').value.trim();
             const password = document.querySelector('input[name="password"]').value.trim();
             const confirmPassword = document.querySelector('input[name="confirm_password"]').value.trim();
@@ -148,7 +144,7 @@
             }
 
             return true;
-        }*/
+        }
     </script>
 </body>
 
