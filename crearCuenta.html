@@ -127,23 +127,8 @@
 
     <script>
         function validarFormulario() {
-            const email = document.querySelector('input[name="email"]').value.trim();
-            const password = document.querySelector('input[name="password"]').value.trim();
-            const confirmPassword = document.querySelector('input[name="confirm_password"]').value.trim();
-
-            // Verificar campos vacíos
-            if (!email || !password || !confirmPassword) {
-                alert('Por favor, rellena todos los campos antes de continuar.');
-                return false;
-            }
-
-            // Verificar que las contraseñas coincidan
-            if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden. Por favor, verifica e inténtalo nuevamente.');
-                return false;
-            }
-
-            return true;
+            window.location.href = "PaginaP.html";
+            return false;
         }
     </script>
 </body>
