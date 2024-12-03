@@ -162,6 +162,10 @@ ALTER TABLE `notificaciones`
   ADD CONSTRAINT `notificaciones_ibfk_1` FOREIGN KEY (`id_actividad`) REFERENCES `actividades` (`id_actividad`);
 COMMIT;
 
+INSERT INTO usuarios (email, password) VALUES 
+('usuario1@example.com', '12345678'),
+('usuario2@example.com', 'contraseña'),
+('admin@example.com', 'admin123');
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
