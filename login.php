@@ -1,5 +1,5 @@
 $host = 'localhost'; // Cambiar si es necesario
-$dbname = 'mi_sistema'; // Nombre de la base de datos
+$dbname = 'cadi'; // Nombre de la base de datos
 $username = 'root'; // Usuario de la base de datos
 $password = ''; // Contraseña del usuario
 
@@ -26,7 +26,7 @@ if ($usuario) {
     // Credenciales correctas
     echo "<h1>¡Bienvenido, {$usuario['email']}!</h1>";
     echo "<p>Inicio de sesión exitoso.</p>";
-    echo '<a href="index2.0.html">Ir al sistema</a>';
+    echo '<a href="paginaP.html">Ir al sistema</a>';
 } else {
     // Credenciales incorrectas
     echo "<h1>Error</h1>";
